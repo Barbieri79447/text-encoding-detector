@@ -24,3 +24,10 @@ Reading a file as text requires knowing its encoding, but many files do not carr
 ## Edge cases
 
 A buffer containing only ASCII bytes is reported as ASCII, not UTF-8. A buffer that is valid UTF-8 but contains only single-byte characters is also ASCII. A buffer with an equal number of even and odd null bytes and no BOM is reported as UTF-16LE, because that byte order is more common. Empty input is reported as ASCII.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
